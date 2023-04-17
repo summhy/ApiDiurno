@@ -1,11 +1,12 @@
 const express = require('express')
 const hbs = require('hbs')
 //const pg = require('pg')
-const override = require('method-override')
+var methodOverride = require('method-override')
 const app = express()
 //const {Pool} = pg;
 app.set('view engine', 'hbs')
-app.use(override('_method'))
+
+app.use(methodOverride("_method", { methods: ["GET"] }))
 
 /* 
 const pool = new Pool({
@@ -34,7 +35,7 @@ app.get("/mantenedor",async(req,res)=>{
 });
 
 
-app.get("/mantenedor/:id",async(req,res)=>{
+app.delete("/mantenedor/:id",async(req,res)=>{
     console.log("método eliminar")
     const {id} = req.params
     const resultado = await fetch("http://localhost:4000/api/v1/personas/"+id,
