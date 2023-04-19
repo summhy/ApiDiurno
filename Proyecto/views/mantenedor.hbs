@@ -24,25 +24,29 @@
                 <th></th>
             </tr>
             <tr>
-                <form action="/mantenedor" method="POST">
+                <form id="formulario" action="/mantenedor" method="POST">
                     <td></td>
-                    <td><input type="text" name="nombre" placeholder="Nombre"></td>
-                    <td><input type="text" name="apellido" placeholder="Apellido"></td>
-                    <td><button><span class="material-symbols-outlined">
+                    <td><input type="text" id="in_nombre" name="nombre" placeholder="Nombre"></td>
+                    <td><input type="text" id="in_apellido" name="apellido" placeholder="Apellido"></td>
+                    <td><button id="btn_add"><span class="material-symbols-outlined">
                             add
+                        </span></button>
+                        <button id="btn_edit" hidden><span class="material-symbols-outlined">
+                            edit
                         </span></button>
                     </td>
                 </form>
             </tr>
             
             {{#each personas}}
-            <tr>
+            <tr id="tr-{{id}}">
                 <td>{{id}}</td>
                 <td>{{nombre}} </td>
                 <td> {{apellido}}</td>
-                <td><span class="material-symbols-outlined">
+                <td><a href="#" onclick="editar({{id}})"><span class="material-symbols-outlined">
                         edit
-                    </span></td>
+                    </span></a>
+                </td>
                 <td>
                     <a href="/mantenedor/{{id}}?_method=delete"><span class="material-symbols-outlined">
                         delete
@@ -52,5 +56,20 @@
 
             {{/each}}
         </table>
+
+        <script>
+            function editar(id){
+                const tr = document.getElementById(`tr-${id}`);
+                const td_nombre= tr.children[1].textContent;
+                const td_apellido= tr.children[2].textContent;
+                document.getElementById("in_nombre").value= td_nombre;
+                document.getElementById("in_apellido").value= td_apellido;
+                document.getElementById("btn_add").hidden =true;
+                document.getElementById("btn_edit").hidden =false;
+                const form = document.getElementById("formulario");
+                form.action = `/mantenedor/${id}?_method=put`
+                console.dir(form)
+            }
+        </script>
     </body>
 </html>

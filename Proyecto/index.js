@@ -7,7 +7,7 @@ const app = express()
 app.set('view engine', 'hbs')
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
-app.use(methodOverride("_method", { methods: ["GET"] }));
+app.use(methodOverride("_method", { methods: ["GET", "POST"] }));
 
 /* 
 const pool = new Pool({
@@ -66,6 +66,27 @@ app.post("/mantenedor", async(req,res)=>{
     res.render("mantenedor", {"personas":data}); 
     }catch(e){
         res.render("error", {"error":"Problemas al Insertar registro"});
+    }
+   
+
+});
+
+app.put("/mantenedor/:id", async(req,res)=>{
+    try{
+        const {id} = req.params;
+        const {nombre,apellido}=req.body;
+    const resultado = await fetch(`http://localhost:4000/api/v1/personas/${id}`,{
+        method:"PUT",
+        body:JSON.stringify({id, nombre, apellido}),
+        headers:{
+            "Content-Type":"application/json"
+        }
+    })
+    const datos = await fetch(`http://localhost:4000/api/v1/personas/`);
+    const data = await datos.json();
+    res.render("mantenedor", {"personas":data}); 
+    }catch(e){
+        res.render("error", {"error":"Problemas al Modificar registro"});
     }
    
 

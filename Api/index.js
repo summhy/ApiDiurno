@@ -15,7 +15,7 @@ const pool = new Pool({
 app.listen(4000)
 
 app.get("/api/v1/personas", async (req,res)=>{
- const resultado = await pool.query("select  * from personas");
+ const resultado = await pool.query("select  * from personas order by id");
  res.json(resultado.rows)
 })
 
@@ -39,6 +39,15 @@ app.post("/api/v1/personas",async(req,res)=>
 {
     const {nombre,apellido} = req.body;
     const resultado =  await pool.query("insert into personas (nombre, apellido) values($1,$2) RETURNING id",[nombre,apellido]);
+    console.log(resultado),
+    res.json({})
+    
+})
+
+app.put("/api/v1/personas/:id",async(req,res)=>
+{
+    const {id, nombre,apellido} = req.body;
+    const resultado =  await pool.query("update personas set nombre =$1, apellido=$2 where id=$3",[nombre,apellido,id]);
     console.log(resultado),
     res.json({})
     
