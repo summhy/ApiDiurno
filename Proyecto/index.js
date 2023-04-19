@@ -5,8 +5,9 @@ var methodOverride = require('method-override')
 const app = express()
 //const {Pool} = pg;
 app.set('view engine', 'hbs')
-
-app.use(methodOverride("_method", { methods: ["GET"] }))
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(methodOverride("_method", { methods: ["GET"] }));
 
 /* 
 const pool = new Pool({
@@ -20,7 +21,7 @@ const pool = new Pool({
 app.get("/",async(req,res)=>{
     //const resultado = await pool.query("select  * from personas");
     //console.log(resultado.rows);
-    const resultado = await fetch("https://localhost:4000/api/v1/personas");
+    const resultado = await fetch("http://localhost:4000/api/v1/personas");
     const data = await resultado.json();
     res.render("index", {"personas":data});
 });
@@ -40,8 +41,34 @@ app.delete("/mantenedor/:id",async(req,res)=>{
     const {id} = req.params
     const resultado = await fetch("http://localhost:4000/api/v1/personas/"+id,
     {method: 'DELETE'});
-    const data = await resultado.json();
-    res.render("mantenedor", {"personas":data});
+    if(resultado.status==200){
+        const datos = await fetch("http://localhost:4000/api/v1/personas");
+        const data = await datos.json();
+        res.render("mantenedor", {"personas":data});
+    }else{
+        res.render("error", {"error":"Problemas al Eliminar registro"});
+    }
+
+});
+
+app.post("/mantenedor", async(req,res)=>{
+    try{
+        const {nombre,apellido}=req.body;
+    const resultado = await fetch("http://localhost:4000/api/v1/personas",{
+        method:"POST",
+        body:JSON.stringify({nombre, apellido}),
+        headers:{
+            "Content-Type":"application/json"
+        }
+    })
+    const datos = await fetch("http://localhost:4000/api/v1/personas");
+    const data = await datos.json();
+    res.render("mantenedor", {"personas":data}); 
+    }catch(e){
+        res.render("error", {"error":"Problemas al Insertar registro"});
+    }
+   
+
 });
 
 

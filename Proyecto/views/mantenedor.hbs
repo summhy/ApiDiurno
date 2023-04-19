@@ -12,17 +12,29 @@
     <body>
 
         <nav> <a href="/">Home</a> </nav>
-        <span class="material-symbols-outlined">
-                        add
-                    </span>
+
+
+        
         <table>
             <tr>
                 <th>#</th>
                 <th>Nombre</th>
                 <th>Apellido</th>
-                <th>Editar</th>
-                <th>Eliminar</th>
+                <th></th>
+                <th></th>
             </tr>
+            <tr>
+                <form action="/mantenedor" method="POST">
+                    <td></td>
+                    <td><input type="text" name="nombre" placeholder="Nombre"></td>
+                    <td><input type="text" name="apellido" placeholder="Apellido"></td>
+                    <td><button><span class="material-symbols-outlined">
+                            add
+                        </span></button>
+                    </td>
+                </form>
+            </tr>
+            
             {{#each personas}}
             <tr>
                 <td>{{id}}</td>
@@ -32,7 +44,7 @@
                         edit
                     </span></td>
                 <td>
-                    <a href="/mantenedor/{{id}}"><span class="material-symbols-outlined">
+                    <a href="/mantenedor/{{id}}?_method=delete"><span class="material-symbols-outlined">
                         delete
                     </span></a>
                 </td>
